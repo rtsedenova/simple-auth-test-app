@@ -1,0 +1,27 @@
+.input-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.input {
+  background-color: #f8f8f8;
+  color: #808185;
+  border: none;
+  width: auto;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  margin-top: 8px;
+  margin-bottom: 18px;
+}
+
+.input:hover {
+  background-color: #f3f3f3;
+}
+
+.label {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: #151317;
+}
