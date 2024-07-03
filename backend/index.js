@@ -1,11 +1,20 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const employeeRoutes = require('./routes/route');
+
+dotenv.config();
+
 const app = express();
-const port = 3000; 
+app.use(cors());
+app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Привет, мир!');
-});
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Something went wrong', err));
 
-app.listen(port, () => {
-  console.log(`Сервер запущен на http://localhost:${port}`);
-});
+app.use('/api', employeeRoutes);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

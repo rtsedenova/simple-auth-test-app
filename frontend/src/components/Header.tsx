@@ -2,9 +2,19 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { logout } from '../features/authSlice';
 import { useNavigate } from 'react-router-dom';
-import './Header.css'; 
+import './Header.css';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  page: 'home' | 'employee';
+  employee?: {
+    imageUrl: string;
+    firstName: string;
+    lastName: string;
+    position: string;
+  };
+}
+
+const Header: React.FC<HeaderProps> = ({ page, employee }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -14,12 +24,36 @@ const Header: React.FC = () => {
   };
 
   return (
-    <div className="header">
+    <div className={`header ${page === 'employee' ? 'header-with-back' : ''}`}>
+      {page === 'employee' && (
+        <button className="back-btn" onClick={() => navigate('/home')}>
+          Назад
+        </button>
+      )}
+
       <div className="header-content">
-        <h1 className="header-title">НАША КОМАНДА</h1>
-        <h3 className="header-subtitle">Это опытные специалисты, хорошо разбирающиеся во всех задачах, которые ложатся на их плечи,<br/> и умеющие находить выход из любых, даже самых сложных ситуаций. </h3>
+        {page === 'employee' ? (
+          <>
+            <img src={employee?.imageUrl} alt={`${employee?.firstName} ${employee?.lastName}`} />
+            <div>
+              <h1>{employee?.firstName} {employee?.lastName}</h1>
+              <h3>{employee?.position}</h3>
+            </div>
+          </>
+        ) : (
+          <>
+            <h1 className="header-title">НАША КОМАНДА</h1>
+            <h3 className="header-subtitle">
+              Это опытные специалисты, хорошо разбирающиеся во всех задачах, которые ложатся на их плечи,
+              <br /> и умеющие находить выход из любых, даже самых сложных ситуаций.
+            </h3>
+          </>
+        )}
       </div>
-      <button className="logout-btn" onClick={handleLogout}>Выход</button>
+
+      <button className="logout-btn" onClick={handleLogout}>
+        Выход
+      </button>
     </div>
   );
 };

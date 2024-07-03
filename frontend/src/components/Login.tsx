@@ -50,8 +50,8 @@ const Login: React.FC = () => {
           placeholder='Введите пароль'
         />
       </div>
-      <button className='login-btn' onClick={handleLogin}>Login</button> {/* Применяем класс 'login-btn' */}
-      <Link to="/register" className='link'>Not registered yet?</Link> {/* Применяем класс 'link' */}
+      <button className='login-btn' onClick={handleLogin}>Войти</button> 
+      <Link to="/register" className='link'>Еще не зарегистрированы?</Link> 
     </div>
   );
 };
