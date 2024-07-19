@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUser, selectUsers } from '../features/userSlice';
-import { Link } from 'react-router-dom';
 import ReusableInput from './Input';
 import './Register.css';
 
@@ -14,8 +14,10 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const dispatch = useDispatch();
   const users = useSelector(selectUsers);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(users); 
@@ -23,18 +25,24 @@ const Register: React.FC = () => {
 
   const handleRegister = () => {
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      alert("Пароли не совпадают");
       return;
     }
     
     const userExists = users.some(user => user.email === email);
     if (userExists) {
-      alert("User with this email already exists");
+      alert("Пользователь с такой почтой уже зарегистрирован");
       return;
     }
 
-    const id = generateId(); 
+    const id = generateId();
     dispatch(addUser({ id, nickname, email, password }));
+    setShowSuccessMessage(true);
+
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+      navigate('/login'); 
+    }, 3000);
   };
 
   return (
@@ -72,6 +80,11 @@ const Register: React.FC = () => {
       </div>
         <button className='register-btn' onClick={handleRegister}>Зарегистрироваться</button>
       <Link to="/login" className='link'>Уже есть аккаунт</Link>
+      {showSuccessMessage && (
+        <div className='success-message'>
+          Аккаунт успешно создан!
+        </div>
+      )}
     </div>
   );
 };

@@ -5,8 +5,7 @@ const Home: React.FC = () => {
   return (
     <div>
       <Header page={'home'}/>
-      <h2>Home</h2>
-      <Employees/>
+        <Employees />
     </div>
   );
 };

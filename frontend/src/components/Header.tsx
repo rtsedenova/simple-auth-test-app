@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { logout } from '../features/authSlice';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ page, employee }) => {
   return (
     <div className={`header ${page === 'employee' ? 'header-with-back' : ''}`}>
       {page === 'employee' && (
-        <button className="back-btn" onClick={() => navigate('/home')}>
+        <button className="back-btn" onClick={() => navigate('/')}>
           Назад
         </button>
       )}

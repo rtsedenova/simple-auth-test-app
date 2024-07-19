@@ -78,3 +78,48 @@
 .back-btn:hover {
   background-color: #5d2e99;
 }
+
+@media (max-width: 1200px) {
+  .header-title {
+    font-size: 48px;
+    margin-bottom: 26px;
+  }
+
+  .header-subtitle {
+    font-size: 18px;
+  }
+
+  .logout-btn {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 814px) {
+  .header-title {
+    font-size: 40px;
+  }
+
+  .header-subtitle {
+    font-size: 16px;
+  }
+
+  .logout-btn {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 548px) {
+  .header-title {
+    margin: 0;
+    font-size: 64px;
+    font-weight: 400;
+    margin-bottom: 26px;
+  }
+
+  .header-subtitle {
+    margin: 0;
+    font-size: 20px;
+    color: white;
+    font-weight: 400;
+  }
+}

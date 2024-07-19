@@ -1,45 +1,49 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import EmployeeCard from '../components/Employee';
-import { EmployeeCardProps } from '../components/Employee';
+import React, { useEffect, useState } from 'react';
+import Employee, {EmployeeProps} from './Employee';
+import './Employees.css';
 
-const EmployeesContainer: React.FC = () => {
-  const [employees, setEmployees] = useState<EmployeeCardProps[]>([]);
+const Employees: React.FC = () => {
+  const [employees, setEmployees] = useState<EmployeeProps[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const cardsPerPage = 8;
 
   useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/getemployees', {
-          // headers: {
-          //   'Accept': 'application/json'
-          // }
-        });
-        setEmployees(response.data);
-      } catch (error) {
-        console.error('Error fetching employees:', error);
-      }
-    };
+    fetch(`http://localhost:3000/employees?_page=${currentPage}&_limit=${cardsPerPage}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => setEmployees(data))
+      .catch(error => console.error('Error fetching employees:', error));
+  }, [currentPage]);
 
-    fetchEmployees();
-  }, []);
+  const totalPages = Math.ceil(employees.length / cardsPerPage);
+
+  function handlePrevPage() {
+    setCurrentPage(prevPage => prevPage - 1);
+  }
+
+  function handleNextPage() {
+    setCurrentPage(prevPage => prevPage + 1);
+  }
 
   return (
-    <div className="cards">
-      {employees.map((employee, index) => (
-        <EmployeeCard
-          key={index}
-          firstName={employee.firstName}
-          lastName={employee.lastName}
-          imageUrl={employee.imageUrl}
-          phone={employee.phone}
-          email={employee.email}
-          position={employee.position}
-          description={employee.description}
-          likes={employee.likes}
-        />
-      ))}
+    <div className='col'>
+      <div className="employees-wrapper">
+        <div className="employees-container">
+          {employees.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage).map((employee) => (
+            <Employee key={employee._id} {...employee} />
+          ))}
+        </div>
+      </div>
+      <div className="pagination">
+        <button onClick={handlePrevPage} disabled={currentPage === 1}>Назад</button>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>Вперед</button>
+      </div>
     </div>
   );
 };
 
-export default EmployeesContainer;
+export default Employees;

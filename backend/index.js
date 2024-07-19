@@ -1,20 +1,87 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const cors = require('cors');
-const dotenv = require('dotenv');
-const employeeRoutes = require('./routes/route');
-
-dotenv.config();
-
+require('dotenv').config();
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
+const port = 3000 || process.env.PORT;
+
+const uri = process.env.MONGODB_URI || "mongodb+srv://recedenova:doki0606@testcluster.chb0egv.mongodb.net/?appName=TestCluster";
+const client = new MongoClient(uri, {
+  tls: true,
+  ssl: true,
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('Something went wrong', err));
+async function run() {
+  try {
+    await client.connect();
+    const database = client.db('test_database'); 
+    await database.command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    
+    const employees = database.collection('employees');
 
-app.use('/api', employeeRoutes);
+    // Get employees
+    app.get('/employees', async (req, res) => {
+      try {
+        const allEmployees = await employees.find({}).toArray();
+        res.json(allEmployees);
+      } catch (error) {
+        res.status(500).send(error);
+      }
+    });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    // Get single exact employee
+    app.get('/employees/:id', async (req, res) => {
+      try {
+        const employeeId = req.params.id;
+        console.log(employeeId)
+        const employee = await employees.findOne({ _id: new ObjectId(employeeId) });
+        if (!employee) {
+          res.status(404).send('Employee not found');
+        } else {
+          res.json(employee);
+        }
+      } catch (error) {
+        res.status(500).send(error);
+      }
+    });
+
+    // Add employees
+    app.post('/employees', async (req, res) => {
+      try {
+        const newEmployees = req.body;
+        const result = await employees.insertMany(newEmployees);
+        res.status(201).json(result);
+      } catch (error) {
+        res.status(500).send(error);
+      }
+    });
+
+    // Delete employees
+    app.delete('/employees', async (req, res) => {
+      try {
+        const result = await employees.deleteMany({});
+        res.json(result);
+      } catch (error) {
+        res.status(500).send(error);
+      }
+    });
+
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+run().catch(console.dir);
