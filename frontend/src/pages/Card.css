@@ -1,0 +1,33 @@
+.employee-details {
+  padding: 6rem 11rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.description {
+  width: 70%;
+  font-size: 1.2rem;
+  line-height: 2rem;
+}
+
+.contacts p {
+  display: flex;
+  align-items: center;
+  padding: 12.5px 20px;
+  font-size: 1.1rem;
+}
+
+.contacts p img {
+  width: 24px;
+  margin-right: 12px;
+}
+
+.not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 64px;
+  color: #666;
+  font-weight: 400;
+}
