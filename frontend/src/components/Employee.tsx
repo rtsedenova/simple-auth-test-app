@@ -28,9 +28,11 @@ const Employee: React.FC<EmployeeProps> = ({ _id, firstName, lastName, imageUrl,
   };
 
   return (
-    <div className="employee-card" data-id={_id} onClick={handleCardClick}>
-      <img src={imageUrl} alt="img" className="employee-image" />
-      <h2>{firstName} {lastName}</h2>
+    <div className="employee-card" >
+      <div className='center' data-id={_id} onClick={handleCardClick}>
+        <img src={imageUrl} alt="img" className="employee-image" />
+        <h2>{firstName} {lastName}</h2>
+      </div>
       <div className="like-button-container">
         <LikeButton />
       </div>

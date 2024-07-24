@@ -28,9 +28,17 @@ const App: React.FC = () => {
       }
     }, 60000); 
 
+    // Handle beforeunload event
+    const handleBeforeUnload = () => {
+      localStorage.removeItem('token');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     return () => {
       events.forEach(event => window.removeEventListener(event, handleActivity));
       clearInterval(interval);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [dispatch, lastActive]);
 
