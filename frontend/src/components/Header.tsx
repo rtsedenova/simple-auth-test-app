@@ -1,6 +1,8 @@
 import { useDispatch } from 'react-redux';
 import { logout } from '../features/authSlice';
 import { useNavigate } from 'react-router-dom';
+import logoutImg from '../../public/icons/logout-icon.png'
+import backIconImg from '../../public/icons/back-btn.png'
 import './Header.css';
 
 interface HeaderProps {
@@ -23,20 +25,25 @@ const Header: React.FC<HeaderProps> = ({ page, employee }) => {
   };
 
   return (
-    <div className={`header ${page === 'employee' ? 'header-with-back' : ''}`}>
+    <div className={`header ${page === 'employee' ? 'employee-header' : ''}`}>
       {page === 'employee' && (
-        <button className="back-btn" onClick={() => navigate('/')}>
-          Назад
-        </button>
+        <>
+          <button className="back-btn" onClick={() => navigate('/')}>
+            Назад
+          </button>
+          <div className='back-icon'>
+            <img src={backIconImg}/>
+          </div>
+        </>
       )}
 
       <div className="header-content">
-        {page === 'employee' ? (
+        {page === 'employee' && employee ? (
           <>
-            <img src={employee?.imageUrl} alt={`${employee?.firstName} ${employee?.lastName}`} />
-            <div>
-              <h1>{employee?.firstName} {employee?.lastName}</h1>
-              <h3>{employee?.position}</h3>
+            <img src={`/${employee.imageUrl}`} alt="img" />
+            <div className="employee-info">
+              <h1>{employee.firstName} {employee.lastName}</h1>
+              <h3>{employee.position}</h3>
             </div>
           </>
         ) : (
@@ -53,6 +60,9 @@ const Header: React.FC<HeaderProps> = ({ page, employee }) => {
       <button className="logout-btn" onClick={handleLogout}>
         Выход
       </button>
+      <div className='logout-icon' onClick={handleLogout}>
+      <img src={logoutImg} />
+      </div>
     </div>
   );
 };

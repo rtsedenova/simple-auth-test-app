@@ -13,7 +13,7 @@ export interface EmployeeProps {
   description: string;
 }
 
-const Employee: React.FC<EmployeeProps> = ({ _id, firstName, lastName, imageUrl }) => {
+const Employee: React.FC<EmployeeProps> = ({ _id, firstName, lastName, imageUrl, position, phone, email, description }) => {
   const navigate = useNavigate();
 
   const handleCardClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -21,6 +21,8 @@ const Employee: React.FC<EmployeeProps> = ({ _id, firstName, lastName, imageUrl 
     const employeeId = target.getAttribute('data-id');
     if (employeeId) {
       sessionStorage.setItem('employeeId', employeeId);
+      const employeeData = { _id, firstName, lastName, imageUrl, position, phone, email, description };
+      sessionStorage.setItem('employee', JSON.stringify(employeeData));
       navigate(`/employee/${employeeId}`);
     }
   };
@@ -35,5 +37,6 @@ const Employee: React.FC<EmployeeProps> = ({ _id, firstName, lastName, imageUrl 
     </div>
   );
 };
+
 
 export default Employee;
